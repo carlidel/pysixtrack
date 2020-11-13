@@ -561,8 +561,24 @@ class Line(Element):
                             any(element.field_errors.dks):
                     knl = element.field_errors.dkn
                     ksl = element.field_errors.dks
-                    knl = knl[:np.amax(np.where(knl)) + 1]  # delete trailing zeros
-                    ksl = ksl[:np.amax(np.where(ksl)) + 1]  # to keep order low
+                    ###################################
+                    # I will add this part just because I had an exception lol.
+                    # ~ Carlidel
+                    ###################################
+                    knl_where = np.where(knl)
+                    if len(knl_where[0]) == 0:
+                        knl_index = 0
+                    else:
+                        knl_index = np.amax(knl_where)
+                    ksl_where = np.where(ksl)
+                    if len(ksl_where[0]) == 0:
+                        ksl_index = 0
+                    else:
+                        ksl_index = np.amax(ksl_where)
+                    ################## And modify down here!
+                    knl = knl[:knl_index + 1]  # delete trailing zeros
+                    ksl = ksl[:ksl_index + 1]  # to keep order low
+                    ###################################
                     self._add_multipole_error_to(element_name, knl, ksl)
 
         return elements_not_found
